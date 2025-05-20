@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- 页面基本设置 -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>whether - C++后端开发</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+  
+  <!-- Tailwind CSS配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB', // 专业蓝色，代表技术与可靠性
+            secondary: '#0284C7', // 辅助色，用于强调
+            dark: '#1E293B', // 深色文本
+            light: '#F8FAFC', // 浅色背景
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'], // 现代无衬线字体
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .transition-custom {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .card-hover {
+        @apply hover:shadow-xl hover:-translate-y-1 transition-all duration-300;
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.8s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    }
+  </style>
+</head>
+<body class="font-inter bg-light text-dark min-h-screen flex flex-col">
+  <!-- 导航栏 - 固定在顶部，滚动时变化样式 -->
+  <header id="navbar" class="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <!-- 左侧Logo和名称 -->
+      <div class="flex items-center space-x-2">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
+          <i class="fa fa-code text-xl"></i>
+        </div>
+        <h1 class="text-xl font-bold text-primary">whether的简历</h1>
+      </div>
+      
+      <!-- 桌面导航菜单 -->
+      <nav class="hidden md:flex items-center space-x-8">
+        <a href="#about" class="font-medium hover:text-primary transition-colors">关于我</a>
+        <a href="#skills" class="font-medium hover:text-primary transition-colors">技能</a>
+        <a href="#projects" class="font-medium hover:text-primary transition-colors">项目经历</a>
+        <a href="#education" class="font-medium hover:text-primary transition-colors">教育背景</a>
+        <a href="#internship" class="font-medium hover:text-primary transition-colors">实习经历</a>
+        <a href="#contact" class="font-medium hover:text-primary transition-colors">联系方式</a>
+      </nav>
+      
+      <!-- 移动端菜单按钮 -->
+      <button id="menuBtn" class="md:hidden text-dark focus:outline-none">
+        <i class="fa fa-bars text-xl"></i>
+      </button>
+    </div>
+    
+    <!-- 移动端导航菜单 - 默认隐藏 -->
+    <div id="mobileMenu" class="md:hidden hidden bg-white shadow-lg absolute w-full animate-fade-in">
+      <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+        <a href="#about" class="font-medium hover:text-primary transition-colors py-2">关于我</a>
+        <a href="#skills" class="font-medium hover:text-primary transition-colors py-2">技能</a>
+        <a href="#projects" class="font-medium hover:text-primary transition-colors py-2">项目经历</a>
+        <a href="#education" class="font-medium hover:text-primary transition-colors py-2">教育背景</a>
+        <a href="#internship" class="font-medium hover:text-primary transition-colors py-2">实习经历</a>
+        <a href="#contact" class="font-medium hover:text-primary transition-colors py-2">联系方式</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容区域 -->
+  <main class="flex-grow pt-24 pb-16">
+    <!-- 个人简介部分 -->
+    <section id="about" class="py-12 md:py-20">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+          <!-- 个人头像 -->
+          <div class="w-full md:w-1/3 flex justify-center">
+            <div class="relative">
+              <div class="absolute -inset-2 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-30 animate-pulse"></div>
+              <img src="./liberate.png" alt="whether" class="w-64 h-64 object-cover rounded-full border-4 border-white shadow-lg relative z-10">
+            </div>
+          </div>
+          
+          <!-- 个人信息 -->
+          <div class="w-full md:w-2/3 animate-fade-in" style="animation-delay: 0.2s">
+            <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-dark mb-4">
+              你好，我是<span class="text-primary">whether</span>
+            </h2>
+            <p class="text-[clamp(1.1rem,2vw,1.5rem)] text-gray-600 mb-6">
+              自动化专业 | 2024届毕业生 | C++后端开发
+            </p>
+            <p class="text-gray-700 mb-8 leading-relaxed">
+              熟悉 C/C++基本语法, 泛型编程，面向对象编程以及类的封装，继承，多态。
+              <br>
+              熟悉数据结构和排序算法。熟悉STL容器，了解底层原理，仿函数，迭代器，适配器。
+              <br>
+              熟悉 Linux 操作系统的基本指令以及 vim，gdb，git，make 开发工具的使用。
+              <br>
+              善于学习和应用新技术，具有良好的团队协作精神和问题解决能力。
+            </p>
+            
+            <!-- 行动按钮 -->
+            <div class="flex flex-wrap gap-4">
+              <a href="#contact" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-full shadow-lg flex items-center gap-2 transition-custom">
+                <i class="fa fa-paper-plane"></i> 联系我
+              </a>
+              <a href="./resume.pdf"  class="px-6 py-3 bg-white hover:bg-gray-50 text-primary border border-primary rounded-full shadow-lg flex items-center gap-2 transition-custom" download>
+                <i class="fa fa-download"></i> 下载简历
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 技能部分 -->
+    <section id="skills" class="py-12 md:py-20 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <!-- 部分标题 -->
+        <div class="text-center mb-12 animate-fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-4">专业技能</h2>
+          <p class="text-gray-600 max-w-3xl mx-auto">掌握C++后端开发技术，持续学习与探索新领域</p>
+        </div>
+        
+        <!-- 技能卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- 编程语言卡片 -->
+          <div class="bg-white rounded-xl shadow-md p-6 card-hover animate-fade-in" style="animation-delay: 0.2s">
+            <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+              <i class="fa fa-code text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">编程语言</h3>
+            <div class="space-y-3">
+              <!-- C技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">C</span>
+                  <span>80%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary rounded-full" style="width: 80%"></div>
+                </div>
+              </div>
+              <!-- C++技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">C++</span>
+                  <span>80%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary rounded-full" style="width: 80%"></div>
+                </div>
+              </div>
+              <!-- Java技能条 
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">GO</span>
+                  <span>60%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary rounded-full" style="width: 60%"></div>
+                </div>
+              </div>-->
+            </div>
+          </div>
+          
+          <!-- 后端技术卡片 -->
+          <div class="bg-white rounded-xl shadow-md p-6 card-hover animate-fade-in" style="animation-delay: 0.4s">
+            <div class="w-14 h-14 rounded-lg bg-secondary/10 flex items-center justify-center mb-4">
+              <i class="fa fa-server text-secondary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">后端技术</h3>
+            <div class="space-y-3">
+              <!-- Linux系统编程技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">系统编程</span>
+                  <span>85%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary rounded-full" style="width: 85%"></div>
+                </div>
+              </div>
+              <!-- 网络编程技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">网络编程</span>
+                  <span>80%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary rounded-full" style="width: 80%"></div>
+                </div>
+              </div>
+              <!-- 数据库技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">数据库</span>
+                  <span>75%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary rounded-full" style="width: 75%"></div>
+                </div>
+              </div>
+              <!-- 多线程编程技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">多线程编程</span>
+                  <span>85%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary rounded-full" style="width: 85%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 开发工具卡片 -->
+          <div class="bg-white rounded-xl shadow-md p-6 card-hover animate-fade-in" style="animation-delay: 0.6s">
+            <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+              <i class="fa fa-tools text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">开发工具</h3>
+            <div class="space-y-3">
+              <!-- Git技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">Git</span>
+                  <span>85%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary rounded-full" style="width: 85%"></div>
+                </div>
+              </div>
+             
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">GCC</span>
+                  <span>75%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary rounded-full" style="width: 75%"></div>
+                </div>
+              </div>
+              <!-- GDB技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">GDB</span>
+                  <span>70%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary rounded-full" style="width: 70%"></div>
+                </div>
+              </div>
+            
+
+           <!-- VS Code技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">VS Code</span>
+                  <span>90%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary rounded-full" style="width: 90%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 基础知识卡片 -->
+          <div class="bg-white rounded-xl shadow-md p-6 card-hover animate-fade-in" style="animation-delay: 0.8s">
+            <div class="w-14 h-14 rounded-lg bg-secondary/10 flex items-center justify-center mb-4">
+              <i class="fa fa-book text-secondary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">基础知识</h3>
+            <div class="space-y-3">
+              <!-- 数据结构技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">数据结构与算法</span>
+                  <span>85%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary rounded-full" style="width: 85%"></div>
+                </div>
+              </div>
+              <!-- 操作系统技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">操作系统</span>
+                  <span>80%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary rounded-full" style="width: 80%"></div>
+                </div>
+              </div>
+              <!-- 计算机组成与原理技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">计算机组成与原理</span>
+                  <span>75%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary rounded-full" style="width: 75%"></div>
+                </div>
+              </div>
+              <!-- 计算机网络技能条 -->
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">计算机网络</span>
+                  <span>85%</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary rounded-full" style="width: 85%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 项目经历部分 -->
+    <section id="projects" class="py-12 md:py-20">
+      <div class="container mx-auto px-4">
+        <!-- 部分标题 -->
+        <div class="text-center mb-12 animate-fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-4">项目经历</h2>
+          <p class="text-gray-600 max-w-3xl mx-auto">基于C++的后端项目实践，积累了丰富的开发经验</p>
+        </div>
+        
+        <!-- 项目卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+       
+          <!--  -->
+          <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover animate-fade-in" style="animation-delay: 0.6s">
+            <div class="relative h-48 overflow-hidden">
+              <img src="./Memory.png" alt="高并发内存池" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                <div class="p-4">
+                  <span class="bg-primary text-white text-xs font-medium px-2.5 py-0.5 rounded">C/C++</span>
+                  <span class="bg-secondary text-white text-xs font-medium px-2.5 py-0.5 rounded ml-2">内存管理</span>
+                  <span class="bg-purple-600 text-white text-xs font-medium px-2.5 py-0.5 rounded ml-2">哈希桶</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">高并发内存池</h3>
+              <p class="text-gray-600 mb-4">
+                模拟TCMalloc针对多线程申请内存的高效管理，实现了三层结构的内存池。
+              </p>
+              <div class="space-y-2 mb-4">
+                <div class="flex items-start">
+                  <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                  <span class="text-gray-700">线程Cache	 为了减少锁竞争带来的性能损耗，为每个线程设计成独享的(TLS)</span>
+                </div>
+                <div class="flex items-start">
+                  <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                  <span class="text-gray-700">中心Cache 给线程Cache提供内存，当线程Cache占用内存过多时会回收</span>
+                </div>
+                <div class="flex items-start">
+                  <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                  <span class="text-gray-700">页 Cache 给中心Cache提供内存，从中心Cache回收、合并前后相邻的页</span>
+                </div>
+                
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500">2025.03 - 2025.04</span>
+                <a href="https://github.com/whether-123/_item" class="text-primary hover:text-primary/80 font-medium flex items-center">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!--  -->
+          <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover animate-fade-in" style="animation-delay: 0.8s">
+            <div class="relative h-48 overflow-hidden">
+              <img src="./Http.png" alt="基于线程池的HTTP服务器" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                <div class="p-4">
+                  <span class="bg-primary text-white text-xs font-medium px-2.5 py-0.5 rounded">C/C++</span>
+                  <span class="bg-secondary text-white text-xs font-medium px-2.5 py-0.5 rounded ml-2">WebSocket</span>
+                  <span class="bg-yellow-600 text-white text-xs font-medium px-2.5 py-0.5 rounded ml-2">CGI</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">基于线程池的HTTP服务器</h3>
+              <p class="text-gray-600 mb-4">
+              轻量级Web服务器，实现客户端请求服务端并返回资源。
+              </p>
+              <div class="space-y-2 mb-4">
+                <div class="flex items-start">
+                  <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                  <span class="text-gray-700">支持GET/POST方法，能够处理URL、请求头解析和请求体解析</span>
+                </div>
+                <div class="flex items-start">
+                  <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                  <span class="text-gray-700">通过环境变量和匿名管道传递HTTP请求参数</span>
+                </div>
+                <div class="flex items-start">
+                  <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                  <span class="text-gray-700">采用线程池和生产者消费者模型，处理并发任务</span>
+                </div>
+          
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500">2025.04 - 2025.05</span>
+                <a href="#" class="text-primary hover:text-primary/80 font-medium flex items-center">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 教育背景部分 -->
+    <section id="education" class="py-12 md:py-20 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <!-- 部分标题 -->
+        <div class="text-center mb-12 animate-fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-4">教育背景</h2>
+          <p class="text-gray-600 max-w-3xl mx-auto">系统学习计算机专业知识，为技术生涯打下坚实基础</p>
+        </div>
+        
+        <!-- 教育时间线 -->
+        <div class="relative">
+          <!-- 时间线 -->
+          <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-1 bg-gray-200 transform md:translate-x-[-50%]"></div>
+          
+          <!-- 本科教育 -->
+          <div class="relative mb-12 md:mb-24 flex flex-col md:flex-row items-center">
+            <div class="order-2 md:w-1/2 md:pl-12 md:text-left text-center mt-4 md:mt-0 animate-fade-in" style="animation-delay: 0.2s">
+              <div class="bg-white rounded-xl shadow-md p-6 card-hover">
+                <h3 class="text-xl font-bold mb-1">自动化</h3>
+                <p class="text-primary font-medium mb-3">武汉工程大学邮电与信息工程学院</p>
+                <p class="text-gray-700 mb-4">2020.10.09 - 2024.06.30 | 本科 | GPA: 3.15/4.0</p>
+                <p class="text-gray-600 mb-4">
+                  学习：数据结构、计算机组成原理、操作系统、计算机网络、数据库原理、面向对象程序设计等。
+                </p>
+                <div class="flex flex-wrap gap-2">
+                <!--  <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">奖学金获得者</span>
+                  <span class="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-sm">优秀学生干部</span>-->
+                </div>
+              </div>
+            </div>
+            <div class="order-1 md:w-1/2 md:pr-12 md:text-right text-center animate-fade-in" style="animation-delay: 0.2s">
+              <div class="inline-block bg-primary text-white rounded-full px-4 py-2 font-medium shadow-lg">
+                2020 - 2024
+              </div>
+            </div>
+            <div class="order-3 absolute left-0 md:left-1/2 w-6 h-6 rounded-full bg-primary border-4 border-white shadow-lg transform md:translate-x-[-50%] z-10"></div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 实习经历部分 -->
+    <section id="internship" class="py-12 md:py-20">
+      <div class="container mx-auto px-4">
+        <!-- 部分标题 -->
+        <div class="text-center mb-12 animate-fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-4">实习经历</h2>
+         <!--  <p class="text-gray-600 max-w-3xl mx-auto">企业实习积累实践经验，了解行业最新技术与流程</p> -->
+        </div>
+        
+        <!-- 实习卡片 -->
+        <!-- 
+        <div class="grid grid-cols-1 gap-8">
+          科技公司实习
+          <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover animate-fade-in" style="animation-delay: 0.2s">
+            <div class="bg-primary p-4 text-white">
+              <h3 class="text-xl font-bold">后端开发实习生</h3>
+              <p class="opacity-90">ABC科技有限公司 | 云计算部门</p>
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between items-center mb-4">
+                <span class="text-sm text-gray-500">2024.06 - 2024.09</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">C++</span>
+              </div>
+              <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                <li>参与公司云平台存储系统的开发与维护，负责块存储模块的优化</li>
+                <li>使用C++实现数据冗余和错误恢复算法，提高系统可靠性</li>
+                <li>优化存储系统的IO性能，使读写速度提升20%</li>
+                <li>参与技术讨论和代码评审，学习公司的开发流程和最佳实践</li>
+                <li>编写单元测试和文档，保证代码质量和可维护性</li>
+              </ul>
+            </div>
+          </div>
+          
+         软件公司实习
+          <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover animate-fade-in" style="animation-delay: 0.4s">
+            <div class="bg-secondary p-4 text-white">
+              <h3 class="text-xl font-bold">软件开发实习生</h3>
+              <p class="opacity-90">XYZ软件有限公司 | 基础架构部</p>
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between items-center mb-4">
+                <span class="text-sm text-gray-500">2023.06 - 2023.09</span>
+                <span class="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-sm">C++</span>
+              </div>
+              <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                <li>协助开发高性能日志系统，使用C++实现日志收集和存储模块</li>
+                <li>设计并实现日志压缩算法，减少存储空间占用30%</li>
+                <li>参与微服务框架的开发，实现服务注册与发现功能</li>
+                <li>学习和使用Docker和Kubernetes，了解容器化和编排技术</li>
+                <li>解决开发过程中的技术难题，积累实际项目经验</li>
+              </ul>
+            </div>
+          </div>-->
+        </div>
+      </div>
+    </section>
+    
+    <!-- 获奖经历部分 -->
+    <section id="awards" class="py-12 md:py-20 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <!-- 部分标题 -->
+        <div class="text-center mb-12 animate-fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-4">获奖经历</h2>
+          <!--<p class="text-gray-600 max-w-3xl mx-auto">在学术和竞赛中取得的成绩与荣誉</p>-->
+        </div>
+        
+        <!-- 获奖卡片
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- 竞赛奖项1 
+          <div class="bg-white rounded-xl shadow-md p-6 card-hover animate-fade-in" style="animation-delay: 0.2s">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-500 flex-shrink-0">
+                <i class="fa fa-trophy text-xl"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-lg font-bold">全国大学生计算机系统能力大赛</h3>
+                <p class="text-gray-500 text-sm">2023年 | 二等奖</p>
+              </div>
+            </div>
+            <p class="text-gray-600">
+              设计并实现了一个高性能Web服务器，在比赛中获得评委好评。
+            </p>
+          </div>
+          
+          <!-- 竞赛奖项2 
+          <div class="bg-white rounded-xl shadow-md p-6 card-hover animate-fade-in" style="animation-delay: 0.4s">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 flex-shrink-0">
+                <i class="fa fa-code text-xl"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-lg font-bold">中国大学生程序设计竞赛(CCPC)</h3>
+                <p class="text-gray-500 text-sm">2022年 | 区域赛银奖</p>
+              </div>
+            </div>
+            <p class="text-gray-600">
+              作为团队成员参加CCPC区域赛，解决多道算法难题，获得银奖。
+            </p>
+          </div>
+          
+          <!-- 奖学金 
+          <div class="bg-white rounded-xl shadow-md p-6 card-hover animate-fade-in" style="animation-delay: 0.6s">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 flex-shrink-0">
+                <i class="fa fa-book text-xl"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-lg font-bold">国家励志奖学金</h3>
+                <p class="text-gray-500 text-sm">2022-2023学年</p>
+              </div>
+            </div>
+            <p class="text-gray-600">
+              因学习成绩优异、综合表现突出，获得国家励志奖学金。
+            </p>
+          </div>
+        </div> -->
+      </div>
+    </section>
+    
+    <!-- 联系部分 -->
+    <section id="contact" class="py-12 md:py-20">
+      <div class="container mx-auto px-4">
+        <!-- 部分标题 -->
+        <div class="text-center mb-12 animate-fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-4">联系我</h2>
+          <p class="text-gray-600 max-w-3xl mx-auto">欢迎随时联系我，期待与你合作</p>
+        </div>
+        
+        <!-- 联系信息 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- 邮箱 -->
+          <div class="bg-white rounded-xl shadow-md p-6 text-center card-hover animate-fade-in" style="animation-delay: 0.2s">
+            <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+              <i class="fa fa-envelope text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">电子邮箱</h3>
+            <p class="text-gray-600 mb-4">111111@xxx.com</p>
+            <a href="mailto:111111@xxx.com" class="text-primary hover:text-primary/80 font-medium">
+              发送邮件 <i class="fa fa-arrow-right ml-1"></i>
+            </a>
+          </div>
+          
+          <!-- 电话 -->
+          <div class="bg-white rounded-xl shadow-md p-6 text-center card-hover animate-fade-in" style="animation-delay: 0.4s">
+            <div class="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-4">
+              <i class="fa fa-phone text-secondary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">联系电话</h3>
+            <p class="text-gray-600 mb-4">+86 111-2222-3333</p>
+            <a href="tel:+86111222333" class="text-secondary hover:text-secondary/80 font-medium">
+              拨打电话 <i class="fa fa-arrow-right ml-1"></i>
+            </a>
+          </div>
+          
+<div class="bg-white rounded-xl shadow-md p-6 text-center card-hover animate-fade-in" style="animation-delay: 0.6s">
+  <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+    <i class="fa fa-comments text-primary text-2xl"></i>
+  </div>
+  <h3 class="text-xl font-bold mb-2">联系我</h3> <!-- 标题改为“联系我们”更贴切 -->
+
+  <div class="flex justify-center gap-6 mb-4"> <!-- 增大间距使文本更清晰 -->
+  
+    <!-- QQ（带文本和链接） -->
+    <div class="flex items-center gap-3">
+      <a href="tencent://AddContact/?uin=123456789&website=qq.com&menu=yes" 
+         target="_blank" 
+         class="w-10 h-10 rounded-full bg-[#00BFFF] flex items-center justify-center text-white hover:bg-opacity-80 transition-all">
+        <i class="fa-brands fa-qq"></i>
+      </a>
+      <span class="font-medium">QQ号：123456789</span>
+    </div>
+  </div> 
+   <!-- 微信（带文本和链接） -->
+    <div class="flex items-center gap-3">
+      <a href="weixin://addfriend?username=your_wechat_id" 
+         target="_blank" 
+         class="w-10 h-10 rounded-full bg-[#07C160] flex items-center justify-center text-white hover:bg-opacity-80 transition-all">
+        <i class="fa-brands fa-weixin"></i>
+      </a>
+      <span class="font-medium">微信号：your_wechat_id</span>
+    </div>
+
+  <a href="#" class="text-primary hover:text-primary/80 font-medium">
+    查看更多联系方式 <i class="fa fa-arrow-right ml-1"></i>
+  </a>
+</div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-dark text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <div class="flex items-center space-x-2">
+            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary">
+              <i class="fa fa-code text-xl"></i>
+            </div>
+            <h2 class="text-xl font-bold">whether的简历</h2>
+          </div>
+          <p class="text-gray-400 mt-2">C++后端开发 | 2024届毕业生</p>
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-8">
+          <div>
+            <h3 class="text-lg font-medium mb-3">快速链接</h3>
+            <ul class="space-y-2">
+              <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于我</a></li>
+              <li><a href="#skills" class="text-gray-400 hover:text-white transition-colors">技能</a></li>
+              <li>

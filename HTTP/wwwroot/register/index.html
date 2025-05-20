@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../favicon.png" type="image/png">
+    <title>用户界面</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5; /* 浅灰背景 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* 注册容器 */
+        .register-box {
+            background: white;
+            padding: 30px 25px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .register-title {
+            text-align: center;
+            color: #1a73e8; /* 谷歌蓝主色 */
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 25px;
+        }
+
+        /* 表单组 */
+        .form-item {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            color: #5f6368;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dfe1e5;
+            border-radius: 4px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1a73e8; /* 聚焦时边框变色 */
+        }
+
+        /* 提交按钮 */
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #1557b0; /* 悬停加深颜色 */
+        }
+
+        /* 底部链接 */
+        .footer-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #5f6368;
+        }
+
+        .footer-link a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-box">
+        <h2 class="register-title">创建账号</h2>
+        <form action="./register/register_cgi" method="POST">
+            <div class="form-item">
+                <label class="form-label" for="name">用户名</label>
+                <input type="text" 
+                       class="form-input" 
+                       id="name" 
+                       name="name" 
+                       required 
+                       placeholder="请输入3-20位字符">
+            </div>
+
+            <div class="form-item">
+                <label class="form-label" for="password">密码</label>
+                <input type="password" 
+                       class="form-input" 
+                       id="password" 
+                       name="password" 
+                       required 
+                       placeholder="至少8位字符">
+            </div>
+
+            <button type="submit" class="submit-btn">注册</button>
+        </form>
+
+        <div class="footer-link">
+            已有账号？<a href="#">登录</a>
+        </div>
+    </div>
+</body>
+</html>
